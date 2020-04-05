@@ -16,9 +16,9 @@ server.listen(PORT, () => {
     console.log(`Listening on PORT${PORT}`);
 })
 
-server.get('/', (request, response) => {
-    response.status(200).send('it\'s working');
-})
+// server.get('/', (request, response) => {
+//     response.status(200).send('it\'s working');
+// })
 
 server.get('/location', (request, response) => {
     const geoData = require('./data/geo.json');
@@ -30,7 +30,29 @@ server.get('/location', (request, response) => {
 
 function GeoData(city, geoData) {
     this.search_query = city;
-    this.formatted_query = geoData[0].display_name;
-    this.latitude = geoData[0].lat;
-    this.longitude = geoData[0].lon;
+    this.display_name = geoData[0].display_name;
+    this.lat = geoData[0].lat;
+    this.log = geoData[0].lon;
+}
+let newArr = [];
+let datetime;
+let description;
+
+server.get('/weather', (request, response) => {
+    const weather = require('./data/weather.json');
+    const weatherState = request.query.weatherState;
+
+    for (let i = 0; i < weather.data.length; i++) {
+        datetime = weather.data[i].datetime;
+        description = weather.data[i].weather.description;
+        const weatherdata = new WeatherData(datetime, description);
+        newArr.push(weatherdata);
+    }
+    response.send(newArr);
+});
+
+
+function WeatherData(datetime, description) {
+    this.datetime = datetime;
+    this.description = description;
 }
