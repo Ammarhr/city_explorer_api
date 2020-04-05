@@ -20,12 +20,21 @@ server.get('/', (request, response) => {
     response.status(200).send('it\'s working');
 })
 
+const errorMessage = {
+    status: 500,
+    responseText: 'Sorry, something went wrong',
+};
 
 server.get('/location', (request, response) => {
     const geoData = require('./data/geo.json');
     const city = request.query.city;
-    const locationCity = new GeoData(city, geoData);
-    response.send(locationCity);
+
+    if (city.toLowerCase() !== 'lynnwood') {
+        response.status(500).send(errorMessage);
+    } else {
+        const locationCity = new GeoData(city, geoData);
+        response.send(locationCity);
+    }
 });
 
 
@@ -36,32 +45,28 @@ function GeoData(city, geoData) {
     this.log = geoData[0].lon;
 }
 let newArr = [];
-let datetime;
+let time;
 let description;
-
 server.get('/weather', (request, response) => {
     const weather = require('./data/weather.json');
-    const weatherState = request.query.weatherState;
-
-    for (let i = 0; i < weather.data.length; i++) {
-        datetime = weather.data[i].datetime;
-        description = weather.data[i].weather.description;
-        const weatherdata = new WeatherData(datetime, description);
-        newArr.push(weatherdata);
+    const city = request.query.city;
+    if (city.toLowerCase() !== 'lynnwood') {
+        response.status(500).send(errorMessage);
+    } else {
+        for (let i = 0; i < weather.data.length; i++) {
+            time = weather.data[i].valid_date;
+            description = weather.data[i].weather.description;
+            const weatherdata = new WeatherData(city, time, description);
+            newArr.push(weatherdata);
+        }
+        response.send(newArr);
     }
-    response.send(newArr);
+
 });
 
 
-function WeatherData(datetime, description) {
-    this.datetime = datetime;
+function WeatherData(city, time, description) {
+    this.search_query = city;
+    this.time = time;
     this.description = description;
 }
-
-server.get((error, request, response) => {
-    response.status(500).send('Sorry, something went wrong', error);
-})
-
-server.use('*', (request, response) => {
-    response.status(404).send('NOT FOUND');
-});
