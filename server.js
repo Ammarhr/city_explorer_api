@@ -29,7 +29,7 @@ server.get('/location', (request, response) => {
     const geoData = require('./data/geo.json');
     const city = request.query.city;
 
-    if (city.toLowerCase() !== 'lynwood') {
+    if (city.toLowerCase() !== 'lynnwood') {
         response.status(500).send(errorMessage);
     } else {
         const locationCity = new GeoData(city, geoData);
@@ -50,7 +50,7 @@ let description;
 server.get('/weather', (request, response) => {
     const weather = require('./data/weather.json');
     const city = request.query.city;
-    if (city.toLowerCase() !== 'lynwood') {
+    if (city.toLowerCase() !== 'lynnwood') {
         response.status(500).send(errorMessage);
     } else {
         for (let i = 0; i < weather.data.length; i++) {
