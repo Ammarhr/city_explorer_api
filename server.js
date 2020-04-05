@@ -16,9 +16,10 @@ server.listen(PORT, () => {
     console.log(`Listening on PORT${PORT}`);
 })
 
-// server.get('/', (request, response) => {
-//     response.status(200).send('it\'s working');
-// })
+server.get('/', (request, response) => {
+    response.status(200).send('it\'s working');
+})
+
 
 server.get('/location', (request, response) => {
     const geoData = require('./data/geo.json');
@@ -56,3 +57,11 @@ function WeatherData(datetime, description) {
     this.datetime = datetime;
     this.description = description;
 }
+
+server.get((error, request, response) => {
+    response.status(500).send('Sorry, something went wrong', error);
+})
+
+server.use('*', (request, response) => {
+    response.status(404).send('NOT FOUND');
+});

@@ -4,19 +4,19 @@
 **Version**: 1.0.0 
 
 ## Overview
-
+this repo is a Node.js server that receiving a **search query** for a city(**back-end** aide). base on this search, process  return data to  regarding the city's location and weather (in **front-end** side).
 
 ## Getting Started
-<!-- What are the steps that a user must take in order to build this app on their own machine and get it running? -->
+1. Deploy a server through **Node.js** and **Express**.
+2. get a search query by using a function that obtains data from **json** files (that contain the information of location and weather)
+3. render the results of search through a response to the **front-end** side.
 
 ## Architecture
-<!-- Provide a detailed description of the application design. What technologies (languages, libraries, etc) you're using, and any other relevant design information. -->
+
+**|JavaScript, Node.js, Express|**
 
 ## Change Log
-<!-- Use this area to document the iterative changes made to your application as each feature is successfully implemented. Use time stamps. Here's an examples:
 
-01-01-2001 4:59pm - Application now has a fully-functional express server, with a GET route for the location resource.
-
-## Credits and Collaborations
-<!-- Give credit (and a link) to other people or resources that helped you build this application. -->
--->
+- 4/5/2020 | 2pm: **location is working**
+- 4/5/2020 | 4pm: **weather is working**
+- 4/5/2020 | 4:25pm: **errors done**
