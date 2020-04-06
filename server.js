@@ -42,9 +42,9 @@ function Location(city, geoData) {
     this.longitude = geoData[0].lon;
 }
 
-let weatherSummary = [];
 
 function weatherHandler(request, response) {
+    let weatherSummary = [];
     const city = request.query.search_query;
     let key = process.env.WEATHER_API_KEY;
     console.log('ddddddddddddddddddddd', key);
@@ -63,9 +63,9 @@ function Weather(dataOfWeather) {
     this.forecast = dataOfWeather.weather.description;
 }
 
-let trailsArray = [];
 
 function trailsHandler(request, response) {
+    let trailsArray = [];
     let key = process.env.TRAIL_API_KEY;
     let lat = request.query.latitude;
     let log = request.query.longitude;
