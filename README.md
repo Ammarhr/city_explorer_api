@@ -1,22 +1,32 @@
-# city_explorer_api
-
+# city_explorer_api:
+--------------------------
 **Author**: Ammar Al-Hariry
-**Version**: 1.0.0 
+**Version**: 2.0.0 
 
+-----------------------------------
 ## Overview
 this repo is a Node.js server that receiving a **search query** for a city(**back-end** aide). base on this search, process  return data to  regarding the city's location and weather (in **front-end** side).
 
+----------------------------------
 ## Getting Started
 1. Deploy a server through **Node.js** and **Express**.
 2. get a search query by using a function that obtains data from **json** files (that contain the information of location and weather)
 3. render the results of search through a response to the **front-end** side.
 
+---------------------------------------
 ## Architecture
 
 **|JavaScript, Node.js, Express|**
 
+---------------------------------------
 ## Change Log
 
 - 4/5/2020 | 2pm: **location is working**
 - 4/5/2020 | 4pm: **weather is working**
-- 4/5/2020 | 4:25pm: **errors done**
+- 4/5/2020 | 4:25pm: **get weather with map**
+- 4/6/2020 | 1:30pm **get location data from the API**
+- 4/6/2020 | 3:15pm **get  weather data from the API**
+- 4/6/2020 | 4:30pm **get  trails data from the API**
+- 4/6/2020 | 4:45pm **errors** 
+
+---------------------------------------------
