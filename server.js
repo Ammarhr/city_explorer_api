@@ -5,8 +5,10 @@ const express = require('express');
 
 const cors = require('cors');
 
+const superagent = require('superagent');
 
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT;
+
 
 const server = express();
 
@@ -20,53 +22,83 @@ server.get('/', (request, response) => {
     response.status(200).send('it\'s working');
 })
 
-const errorMessage = {
-    status: 500,
-    responseText: 'Sorry, something went wrong',
-};
+server.get('/location', locationHandler);
+server.get('/weather', weatherHandler);
+server.get('/trails', trailsHandler);
 
-server.get('/location', (request, response) => {
-    const geoData = require('./data/geo.json');
+function locationHandler(request, response) {
     const city = request.query.city;
-
-    if (city.toLowerCase() !== 'lynnwood') {
-        response.status(500).send(errorMessage);
-    } else {
-        const locationCity = new GeoData(city, geoData);
-        response.send(locationCity);
-    }
-});
-
-
-function GeoData(city, geoData) {
-    this.search_query = city;
-    this.display_name = geoData[0].display_name;
-    this.lat = geoData[0].lat;
-    this.log = geoData[0].lon;
+    let key = process.env.GEOCODE_API_KEY;
+    const url = `https://eu1.locationiq.com/v1/search.php?key=${key}&q=${city}&format=json`
+    superagent.get(url)
+        .then(geoData => {
+            const locationData = new Location(city, geoData.body)
+            response.status(200).json(locationData)
+        })
 }
-let newArr = [];
-let time;
-let description;
-server.get('/weather', (request, response) => {
-    const weather = require('./data/weather.json');
-    const city = request.query.city;
-    if (city.toLowerCase() !== 'lynnwood') {
-        response.status(500).send(errorMessage);
-    } else {
-        for (let i = 0; i < weather.data.length; i++) {
-            time = weather.data[i].valid_date;
-            description = weather.data[i].weather.description;
-            const weatherdata = new WeatherData(city, time, description);
-            newArr.push(weatherdata);
-        }
-        response.send(newArr);
-    }
-
-});
 
 
-function WeatherData(city, time, description) {
+
+function Location(city, geoData) {
     this.search_query = city;
-    this.time = time;
-    this.description = description;
+    this.formatted_query = geoData[0].display_name;
+    this.latitude = geoData[0].lat;
+    this.longitude = geoData[0].lon;
 }
+
+let weatherSummary = [];
+
+function weatherHandler(request, response) {
+    const city = request.query.search_query;
+    let key = process.env.WEATHER_API_KEY;
+    console.log('ddddddddddddddddddddd', key);
+    const url = `https://api.weatherbit.io/v2.0/forecast/daily?city=${city}&key=${key}`;
+    superagent.get(url)
+        .then(weatherData => {
+            weatherData.body.data.map(theWeather => {
+                var weatherData = new Weather(theWeather);
+                weatherSummary.push(weatherData);
+            })
+            response.send(weatherSummary);
+        })
+}
+
+function Weather(dataOfWeather) {
+    this.time = dataOfWeather.valid_date;
+    this.forecast = dataOfWeather.weather.description;
+}
+
+let trailsArray = [];
+
+function trailsHandler(request, response) {
+    let key = process.env.TRAIL_API_KEY;
+    let lat = request.query.latitude;
+    let log = request.query.longitude;
+    let url = `https://www.hikingproject.com/data/get-trails?lat=${lat}&lon=${log}&maxDistance=200&key=${key}`
+    superagent.get(url)
+        .then(dataTrails => {
+            dataTrails.body.trails.map(trailsData => {
+                var dataOfTrails = new Trail(trailsData);
+                trailsArray.push(dataOfTrails);
+            })
+            response.send(trailsArray);
+        })
+}
+
+function Trail(trailsData) {
+    this.name = trailsData.name;
+    this.location = trailsData.location;
+    this.length = trailsData.length;
+    this.stars = trailsData.stars;
+    this.starvote = trailsData.starvote;
+    this.summary = trailsData.summary;
+    this.trail_url = trailsData.url;
+    this.conditions = trailsData.conditions;
+    this.condition_date = trailsData.conditionDate;
+    this.condition_time = trailsData.conditionDate;
+}
+
+
+server.use((request, response) => {
+    response.status(500).send('Sorry, something went wrong')
+})
