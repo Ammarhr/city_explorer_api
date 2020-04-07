@@ -28,5 +28,8 @@ this repo is a Node.js server that receiving a **search query** for a city(**bac
 - 4/6/2020 | 3:15pm **get  weather data from the API**
 - 4/6/2020 | 4:30pm **get  trails data from the API**
 - 4/6/2020 | 4:45pm **errors** 
+- 4/7/2020 | 7:30 **add a database**
+- 4/7/2020 | 9 : 30 **search from the database or API**
+- 4/7/2020 | 9 : 45 **deploy**
 
 ---------------------------------------------
