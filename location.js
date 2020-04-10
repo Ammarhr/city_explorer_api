@@ -1,9 +1,13 @@
 'use strict';
 const superagent = require('superagent');
+// const pg = require('pg');
+// const client = new pg.Client(process.env.DATABASE_URL);
+
 const client = require('./dataBase.js')
 
 function locationHandler(request, response) {
     const city = request.query.city;
+    console.log('this is qeeqeqe', request.query);
     let sql = 'SELECT * FROM locationInfo WHERE search_query = $1';
     const safeValue = [city];
     client.query(sql, safeValue).then((dataResult) => {
@@ -22,8 +26,8 @@ function locationHandler(request, response) {
                     locationData.latitude,
                     locationData.longitude,
                 ];
-                superagent.client.query(sql, safeValue);
                 response.status(200).json(locationData);
+                client.query(sql, safeValue);
             });
         }
     });

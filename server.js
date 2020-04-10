@@ -16,7 +16,7 @@ server.use(cors());
 
 client.connect().then(() => {
     server.listen(PORT, () => {
-        console.log(`Listening on PORT${PORT}`);
+        console.log(`Listening on PORT ${PORT}`);
     });
 });
 
